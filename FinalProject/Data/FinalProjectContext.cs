@@ -25,7 +25,8 @@ namespace FinalProject.Models
 
             modelBuilder.Entity<ProfessorSoftware>()
                .HasOne(ps => ps.Software)
-               .WithMany(s => s.NeededBy);
+               .WithMany(s => s.NeededBy)
+               .HasForeignKey(ps => ps.SoftwareID);
 
              modelBuilder.Entity<SystemSoftware>()
                 .HasKey(ps => new { ps.CSSystemID, ps.SoftwareID });

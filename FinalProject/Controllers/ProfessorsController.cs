@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinalProject.Models;
+using FinalProject.ViewModels;
 
 namespace FinalProject.Controllers
 {
@@ -33,13 +34,23 @@ namespace FinalProject.Controllers
             }
 
             var professor = await _context.Professors
+                .Include(t => t.NeededSoftware)
                 .FirstOrDefaultAsync(m => m.ProfessorID == id);
+
+            var software = await _context.Software.ToListAsync();
+
             if (professor == null)
             {
                 return NotFound();
             }
 
-            return View(professor);
+            ProfessorSoftwareViewModel psViewModel = new ProfessorSoftwareViewModel
+            {
+                Professor = professor,
+                Softwares = software
+            };
+
+            return View(psViewModel);
         }
 
         // GET: Professors/Create

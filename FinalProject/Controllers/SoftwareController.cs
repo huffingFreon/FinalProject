@@ -9,11 +9,11 @@ using FinalProject.Models;
 
 namespace FinalProject.Controllers
 {
-    public class SoftwaresController : Controller
+    public class SoftwareController : Controller
     {
         private readonly FinalProjectContext _context;
 
-        public SoftwaresController(FinalProjectContext context)
+        public SoftwareController(FinalProjectContext context)
         {
             _context = context;
         }
