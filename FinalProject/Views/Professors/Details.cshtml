@@ -10,38 +10,73 @@
     <h4>Professor</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Professor.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Professor.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Professor.Email)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Professor.Email)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Professor.PhoneNumber)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Professor.PhoneNumber)
         </dd>
     </dl>
-</div>
-<hr />
-<div>
-   <h4>Software Needed by @Model.Professor.Name</h4>
-   <ul>
-        @foreach (var item in Model.Professor.NeededSoftware)
-        {
-            <li>@item.Software.Name</li>
-        }
-   </ul> 
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Professor.ProfessorID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
 
+<hr />
+<div>
+    <h4>Software Needed by @Model.Professor.Name</h4>
+
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Softwares[0].SoftwareID)</th>
+                <th>@Html.DisplayNameFor(model => model.Softwares[0].Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Softwares[0].Version)</th>
+                <th>@Html.DisplayNameFor(model => model.Softwares[0].URL)</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Professor.NeededSoftware)
+            {
+                <tr>
+                    <th>@Html.DisplayFor(modelItem => item.SoftwareID)</th>
+                    <td>@Html.DisplayFor(modelItem => item.Software.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Software.Version)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Software.URL)</td>
+                    <td class="text-center"><a href="/Professors/Details/@Model.Professor.ProfessorID/SoftwareDelete/@item.Software.SoftwareID"><i class="fas fa-dumpster-fire"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <form class="form-inline" action="/professors/detail/@Model.Professor.ProfessorID" method="post">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label class="p-2"><b>Add Software: </b></label>
+            <select class="form-control" name="sId">
+                @foreach (var item in Model.Softwares)
+                {
+                    <option value="@item.SoftwareID">@item.Name</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-lg"><i class="fas fa-plus"></i></button>
+
+    </form>
+</div>

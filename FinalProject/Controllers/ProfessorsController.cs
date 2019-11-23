@@ -53,6 +53,61 @@ namespace FinalProject.Controllers
             return View(psViewModel);
         }
 
+        // POST: Professors/Details
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Detail(int id, int sId)
+        {
+            var professor = _context.Professors
+                 .Include(t => t.NeededSoftware)
+                 .Single(t => t.ProfessorID== id);
+
+            var software = _context.Software.Single(s => s.SoftwareID == sId);
+
+            professor.NeededSoftware.Add(new ProfessorSoftware { Professor = professor, Software = software});
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return View(e);
+            }
+
+            return Redirect($"/Professors/Details/{id}");
+        }
+
+
+        [Route("/professors/details/{id}/SoftwareDelete/{sId}")]
+        public IActionResult SoftwareDelete(int id, int sId)
+        {
+            try
+            {
+                var professor = _context.Professors
+                 .Include(p => p.NeededSoftware)
+                 .Single(p => p.ProfessorID == id);
+
+                var software = _context.Software.Single(s => s.SoftwareID == sId);
+
+                professor.NeededSoftware.Remove(professor.NeededSoftware.Where(ps => ps.SoftwareID == sId).First());
+
+
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return View(e);
+            }
+
+
+            return Redirect($"/Professors/Details/{id}");
+        }
+
         // GET: Professors/Create
         public IActionResult Create()
         {

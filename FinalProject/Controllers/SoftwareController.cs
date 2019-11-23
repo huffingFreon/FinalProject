@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinalProject.Models;
+using FinalProject.ViewModels;
 
 namespace FinalProject.Controllers
 {
@@ -33,13 +34,75 @@ namespace FinalProject.Controllers
             }
 
             var software = await _context.Software
+                .Include(t => t.NeededBy)
                 .FirstOrDefaultAsync(m => m.SoftwareID == id);
+
+            var professors = await _context.Professors.ToListAsync();
+
             if (software == null)
             {
                 return NotFound();
             }
 
-            return View(software);
+            SoftwareProfessorsViewModel spViewModel = new SoftwareProfessorsViewModel
+            {
+                Software = software,
+                Professors = professors
+            };
+
+            return View(spViewModel);
+        }
+
+        // POST: Software/Details
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Detail(int id, int pId)
+        {
+            var software = _context.Software
+                 .Include(t => t.NeededBy)
+                 .Single(t => t.SoftwareID == id);
+
+            var professor = _context.Professors.Single(p => p.ProfessorID == pId);
+
+            software.NeededBy.Add(new ProfessorSoftware { Software = software, Professor = professor});
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return View(e);
+            }
+
+            return Redirect($"/Software/Details/{id}");
+        }
+
+        [Route("/software/details/{id}/ProfessorDelete/{pId}")]
+        public IActionResult ProfessorDelete(int id, int pId)
+        {
+            try
+            {
+                var software = _context.Software
+                 .Include(s => s.NeededBy)
+                 .Single(s => s.SoftwareID == id);
+
+                var professors = _context.Professors.Single(p => p.ProfessorID== pId);
+
+                software.NeededBy.Remove(software.NeededBy.Where(sp => sp.ProfessorID== pId).First());
+
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return View(e);
+            }
+
+            return Redirect($"/Software/Details/{id}");
         }
 
         // GET: Softwares/Create
