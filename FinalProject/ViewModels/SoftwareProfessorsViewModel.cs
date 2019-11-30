@@ -1,4 +1,14 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////
+///
+/// Project: Final Project 
+/// File Name: SoftwareProfessorsViewModel.cs
+/// Description: Model for when views require one software to many professors
+/// Course: CSCI 2910-201
+/// Author: Ben Higgins, higginsba@etsu.edu
+/// Created: November 23, 2019
+/// 
+///////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

@@ -1,4 +1,14 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////
+///
+/// Project: Final Project 
+/// File Name: Professor.cs
+/// Description: Model for Professor objects
+/// Course: CSCI 2910-201
+/// Author: Ben Higgins, higginsba@etsu.edu
+/// Created: November 23, 2019
+/// 
+///////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,5 +26,7 @@ namespace FinalProject.Models
         public string PhoneNumber { get; set; }
 
         public List<ProfessorSoftware> NeededSoftware { get; set; }
+
+        public List<InventoryItem> CheckedOutItems { get; set; }
     }
 }

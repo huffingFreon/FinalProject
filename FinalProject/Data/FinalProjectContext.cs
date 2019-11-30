@@ -1,4 +1,14 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////
+///
+/// Project: Final Project 
+/// File Name: FinalProjectContext.cs
+/// Description: Information for database interaction 
+/// Course: CSCI 2910-201
+/// Author: Ben Higgins, higginsba@etsu.edu
+/// Created: November 23, 2019
+/// 
+///////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,6 +51,10 @@ namespace FinalProject.Models
                .WithMany(s => s.NeededOn)
                .HasForeignKey(ps => ps.SoftwareID);
 
+            modelBuilder.Entity<InventoryItem>()
+                .HasOne(i => i.User)
+                .WithMany(p => p.CheckedOutItems)
+                .HasForeignKey(i => i.UserID);
         }
 
         public DbSet<FinalProject.Models.Professor> Professors { get; set; }
@@ -48,6 +62,6 @@ namespace FinalProject.Models
         public DbSet<FinalProject.Models.ProfessorSoftware> ProfessorSoftware { get; set; }
         public DbSet<FinalProject.Models.Software> Software { get; set; }
         public DbSet<FinalProject.Models.CSSystem> CSSystems { get; set; }
-        public DbSet<FinalProject.Models.SystemSoftware > SystemSoftware { get; set; }
+        public DbSet<FinalProject.Models.SystemSoftware> SystemSoftware { get; set; }
     }
 }
