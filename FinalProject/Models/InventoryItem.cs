@@ -13,7 +13,7 @@ namespace FinalProject.Models
 
         public bool CheckedOut { get; set; }
 
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
 
         public Professor User { get; set; }
     }

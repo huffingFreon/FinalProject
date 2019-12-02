@@ -21,5 +21,7 @@ namespace FinalProject.ViewModels
         public Professor Professor { get; set; }
 
         public List<Software> Softwares { get; set; }
+
+        public List<InventoryItem> InventoryItems { get; set; }
     }
 }

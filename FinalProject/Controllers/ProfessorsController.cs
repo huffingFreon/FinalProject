@@ -45,9 +45,12 @@ namespace FinalProject.Controllers
 
             var professor = await _context.Professors
                 .Include(t => t.NeededSoftware)
+                .Include(t => t.CheckedOutItems)
                 .FirstOrDefaultAsync(m => m.ProfessorID == id);
 
             var software = await _context.Software.ToListAsync();
+
+            var items = await _context.InventoryItems.ToListAsync();
 
             if (professor == null)
             {
@@ -57,18 +60,19 @@ namespace FinalProject.Controllers
             ProfessorSoftwareViewModel psViewModel = new ProfessorSoftwareViewModel
             {
                 Professor = professor,
-                Softwares = software
+                Softwares = software,
+                InventoryItems = items
             };
 
             return View(psViewModel);
         }
 
-        // POST: Professors/Details
+        // POST: Professors/AddSoftware
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Detail(int id, int sId)
+        public IActionResult AddSoftware(int id, int sId)
         {
             var professor = _context.Professors
                  .Include(t => t.NeededSoftware)
@@ -91,6 +95,35 @@ namespace FinalProject.Controllers
             return Redirect($"/Professors/Details/{id}");
         }
 
+        // POST: Professors/AddItem
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddItem(int id, int iId)
+        {
+            var professor = _context.Professors
+                 .Include(t => t.CheckedOutItems)
+                 .Single(t => t.ProfessorID == id);
+
+            var inventoryItem = _context.InventoryItems.Single(i => i.InventoryItemID == iId);
+
+            inventoryItem.CheckedOut = true;
+
+            professor.CheckedOutItems.Add(inventoryItem);
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return View(e);
+            }
+
+            return Redirect($"/Professors/Details/{id}");
+        }
 
         [Route("/professors/details/{id}/SoftwareDelete/{sId}")]
         public IActionResult SoftwareDelete(int id, int sId)
@@ -114,6 +147,32 @@ namespace FinalProject.Controllers
                 return View(e);
             }
 
+
+            return Redirect($"/Professors/Details/{id}");
+        }
+
+        [Route("/professors/details/{id}/ItemDelete/{iId}")]
+        public IActionResult ItemDelete(int id, int iId)
+        {
+            try
+            {
+                var professor = _context.Professors
+                 .Include(p => p.CheckedOutItems)
+                 .Single(p => p.ProfessorID == id);
+
+                var inventoryItem = _context.InventoryItems.Single(p => p.InventoryItemID == iId);
+
+                inventoryItem.CheckedOut = false;
+
+                professor.CheckedOutItems.Remove(inventoryItem);
+
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return View(e);
+            }
 
             return Redirect($"/Professors/Details/{id}");
         }

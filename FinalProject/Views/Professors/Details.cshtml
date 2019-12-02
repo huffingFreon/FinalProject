@@ -64,7 +64,7 @@
     </table>
 </div>
 <div>
-    <form class="form-inline" action="/professors/detail/@Model.Professor.ProfessorID" method="post">
+    <form class="form-inline" action="/professors/AddSoftware/@Model.Professor.ProfessorID" method="post">
         @Html.AntiForgeryToken()
         <div class="form-group">
             <label class="p-2"><b>Add Software: </b></label>
@@ -72,6 +72,50 @@
                 @foreach (var item in Model.Softwares)
                 {
                     <option value="@item.SoftwareID">@item.Name</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-lg"><i class="fas fa-plus"></i></button>
+
+    </form>
+</div>
+
+<hr />
+<div>
+    <h4>Items used by @Model.Professor.Name</h4>
+
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.InventoryItems[0].InventoryItemID)</th>
+                <th>@Html.DisplayNameFor(model => model.InventoryItems[0].Description)</th>
+                <th>@Html.DisplayNameFor(model => model.InventoryItems[0].CheckedOut)</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Professor.CheckedOutItems)
+            {
+                <tr>
+                    <th>@Html.DisplayFor(modelItem => item.InventoryItemID)</th>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CheckedOut)</td>
+                    <td class="text-center"><a href="/Professors/Details/@Model.Professor.ProfessorID/ItemDelete/@item.InventoryItemID"><i class="fas fa-dumpster-fire"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <form class="form-inline" action="/professors/AddItem/@Model.Professor.ProfessorID" method="post">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label class="p-2"><b>Add Item: </b></label>
+            <select class="form-control" name="iId">
+                @foreach (var item in Model.InventoryItems)
+                {
+                    <option value="@item.InventoryItemID">@item.Description</option>
                 }
             </select>
         </div>

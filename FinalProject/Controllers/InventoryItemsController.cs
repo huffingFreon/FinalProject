@@ -47,7 +47,7 @@ namespace FinalProject.Controllers
         // GET: InventoryItems/Create
         public IActionResult Create()
         {
-            ViewData["UserID"] = new SelectList(_context.Professors, "ProfessorID", "ProfessorID");
+            ViewData["UserID"] = new SelectList(_context.Professors, "ProfessorID", "Name");
             return View();
         }
 
@@ -56,10 +56,18 @@ namespace FinalProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InventoryItemID,Description,CheckedOut,UserID")] InventoryItem inventoryItem)
+        public async Task<IActionResult> Create([Bind("InventoryItemID,Description,UserID")] InventoryItem inventoryItem)
         {
             if (ModelState.IsValid)
             {
+                if (inventoryItem.UserID != null)
+                {
+                    inventoryItem.CheckedOut = true;
+                }
+                else
+                {
+                    inventoryItem.CheckedOut = false;
+                }
                 _context.Add(inventoryItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -81,7 +89,7 @@ namespace FinalProject.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserID"] = new SelectList(_context.Professors, "ProfessorID", "ProfessorID", inventoryItem.UserID);
+            ViewData["UserID"] = new SelectList(_context.Professors, "ProfessorID", "Name", inventoryItem.UserID);
             return View(inventoryItem);
         }
 
@@ -90,7 +98,7 @@ namespace FinalProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("InventoryItemID,Description,CheckedOut,UserID")] InventoryItem inventoryItem)
+        public async Task<IActionResult> Edit(int id, [Bind("InventoryItemID,Description,UserID")] InventoryItem inventoryItem)
         {
             if (id != inventoryItem.InventoryItemID)
             {
@@ -101,6 +109,14 @@ namespace FinalProject.Controllers
             {
                 try
                 {
+                    if (inventoryItem.UserID != null)
+                    {
+                        inventoryItem.CheckedOut = true;
+                    }
+                    else
+                    {
+                        inventoryItem.CheckedOut = false;
+                    }
                     _context.Update(inventoryItem);
                     await _context.SaveChangesAsync();
                 }
