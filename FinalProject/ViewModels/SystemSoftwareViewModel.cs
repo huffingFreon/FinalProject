@@ -1,8 +1,8 @@
 ﻿///////////////////////////////////////////////////////////
 ///
 /// Project: Final Project 
-/// File Name: CSSystem.cs
-/// Description: Model for CSSystem objects
+/// File Name: SystemSoftwareViewModel.cs
+/// Description: Model for when one CSSystem has many software
 /// Course: CSCI 2910-201
 /// Author: Ben Higgins, higginsba@etsu.edu
 /// Created: December 06, 2019
@@ -15,18 +15,12 @@ using System.Threading.Tasks;
 
 namespace FinalProject.Models
 {
-    public class CSSystem 
+    public class SystemSoftwareViewModel
     {
         public int CSSystemID { get; set; }
 
-        public string Name { get; set; }
+        public CSSystem CSSystem { get; set; }
 
-        public string IPAddress { get; set; }
-
-        public int PrimaryUserID { get; set; }
-
-        public Professor PrimaryUser { get; set; }
-
-        public  List<SystemSoftware> NeededSoftware { get; set; }
+        public List<Software> Software { get; set; }
     }
 }

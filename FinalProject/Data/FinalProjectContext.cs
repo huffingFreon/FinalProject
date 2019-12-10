@@ -51,10 +51,11 @@ namespace FinalProject.Models
                .WithMany(s => s.NeededOn)
                .HasForeignKey(ps => ps.SoftwareID);
 
-            modelBuilder.Entity<InventoryItem>()
-                .HasOne(i => i.User)
-                .WithMany(p => p.CheckedOutItems)
-                .HasForeignKey(i => i.UserID);
+            //Tested and working without this block, but also with it, so I left commented in case you had troubles getting to run without. 
+            //modelBuilder.Entity<InventoryItem>()
+            //    .HasOne(i => i.User)
+            //    .WithMany(p => p.CheckedOutItems)
+            //    .HasForeignKey(i => i.UserID);
         }
 
         public DbSet<FinalProject.Models.Professor> Professors { get; set; }

@@ -1,4 +1,14 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////
+///
+/// Project: Final Project 
+/// File Name: InventoryItemsController.cs
+/// Description: Controls behavior for InventoryItem objects 
+/// Course: CSCI 2910-201
+/// Author: Ben Higgins, higginsba@etsu.edu
+/// Created: November 27, 2019
+/// 
+///////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

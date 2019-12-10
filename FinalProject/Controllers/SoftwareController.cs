@@ -45,9 +45,12 @@ namespace FinalProject.Controllers
 
             var software = await _context.Software
                 .Include(t => t.NeededBy)
+                .Include(s => s.NeededOn)
                 .FirstOrDefaultAsync(m => m.SoftwareID == id);
 
             var professors = await _context.Professors.ToListAsync();
+
+            var systems = await _context.CSSystems.ToListAsync();
 
             if (software == null)
             {
@@ -57,7 +60,8 @@ namespace FinalProject.Controllers
             SoftwareProfessorsViewModel spViewModel = new SoftwareProfessorsViewModel
             {
                 Software = software,
-                Professors = professors
+                Professors = professors,
+                Systems = systems
             };
 
             return View(spViewModel);
@@ -103,6 +107,55 @@ namespace FinalProject.Controllers
                 var professors = _context.Professors.Single(p => p.ProfessorID== pId);
 
                 software.NeededBy.Remove(software.NeededBy.Where(sp => sp.ProfessorID== pId).First());
+
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return View(e);
+            }
+
+            return Redirect($"/Software/Details/{id}");
+        }
+
+        [Route("/software/details/{id}/SystemDelete/{sId}")]
+        public IActionResult SystemDelete(int id, int sId)
+        {
+            try
+            {
+                var software = _context.Software
+                 .Include(s => s.NeededOn)
+                 .Single(s => s.SoftwareID == id);
+
+                var systems = _context.CSSystems.Single(c => c.CSSystemID == sId);
+
+                software.NeededOn.Remove(software.NeededOn.Where(sp => sp.CSSystemID == sId).First());
+
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return View(e);
+            }
+
+            return Redirect($"/Software/Details/{id}");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SystemAdd(int id, int sId)
+        {
+            try
+            {
+                var software = _context.Software
+                 .Include(s => s.NeededOn)
+                 .Single(s => s.SoftwareID == id);
+
+                var systems = _context.CSSystems.Single(c => c.CSSystemID == sId);
+
+                software.NeededOn.Add(new SystemSoftware { Software = software, CSSystem = systems});
 
                 _context.SaveChanges();
             }

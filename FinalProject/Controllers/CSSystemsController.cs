@@ -1,4 +1,14 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////
+///
+/// Project: Final Project 
+/// File Name: CSSystemsController.cs
+/// Description: Controls decision logic of CSSystem pages 
+/// Course: CSCI 2910-201
+/// Author: Ben Higgins, higginsba@etsu.edu
+/// Created: December 06, 2019
+/// 
+///////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,21 +43,84 @@ namespace FinalProject.Controllers
                 return NotFound();
             }
 
-            var cSSystem = await _context.CSSystems
-                .Include(c => c.PrimaryUser)
-                .FirstOrDefaultAsync(m => m.CSSystemID == id);
-            if (cSSystem == null)
+            var cssystem = await _context.CSSystems
+                .Include(t => t.NeededSoftware)
+                .Include(u => u.PrimaryUser)
+                .FirstOrDefaultAsync(c => c.CSSystemID == id);
+
+            var software = await _context.Software.ToListAsync();
+
+            if (cssystem == null)
             {
                 return NotFound();
             }
 
-            return View(cSSystem);
+            SystemSoftwareViewModel ssViewModel = new SystemSoftwareViewModel 
+            {
+                Software = software,
+                CSSystem = cssystem
+            };
+
+            return View(ssViewModel);
+        }
+
+        // POST: CSSystems/AddSoftware
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddSoftware(int id, int sId)
+        {
+            var cssystem = _context.CSSystems
+                 .Include(t => t.NeededSoftware)
+                 .Single(t => t.CSSystemID == id);
+
+            var software = _context.Software.Single(s => s.SoftwareID == sId);
+
+            cssystem.NeededSoftware.Add(new SystemSoftware{ CSSystem = cssystem, Software = software });
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return View(e);
+            }
+
+            return Redirect($"/CSSystems/Details/{id}");
+        }
+
+        [Route("/CSSystems/details/{id}/SoftwareDelete/{sId}")]
+        public IActionResult SoftwareDelete(int id, int sId)
+        {
+            try
+            {
+                var cssystem = _context.CSSystems
+                 .Include(c => c.NeededSoftware)
+                 .Single(c => c.CSSystemID == id);
+
+                var software = _context.Software.Single(s => s.SoftwareID == sId);
+
+                cssystem.NeededSoftware.Remove(cssystem.NeededSoftware.Where(ss => ss.SoftwareID == sId).First());
+
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return View(e);
+            }
+
+
+            return Redirect($"/CSSystems/Details/{id}");
         }
 
         // GET: CSSystems/Create
         public IActionResult Create()
         {
-            ViewData["PrimaryUserID"] = new SelectList(_context.Professors, "ProfessorID", "ProfessorID");
+            ViewData["PrimaryUserID"] = new SelectList(_context.Professors, "ProfessorID", "Name");
             return View();
         }
 
@@ -81,7 +154,7 @@ namespace FinalProject.Controllers
             {
                 return NotFound();
             }
-            ViewData["PrimaryUserID"] = new SelectList(_context.Professors, "ProfessorID", "ProfessorID", cSSystem.PrimaryUserID);
+            ViewData["PrimaryUserID"] = new SelectList(_context.Professors, "ProfessorID", "Name", cSSystem.PrimaryUserID);
             return View(cSSystem);
         }
 

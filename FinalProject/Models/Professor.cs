@@ -28,5 +28,7 @@ namespace FinalProject.Models
         public List<ProfessorSoftware> NeededSoftware { get; set; }
 
         public List<InventoryItem> CheckedOutItems { get; set; }
+
+        public List<CSSystem> PrimaryUserSystems { get; set; }
     }
 }

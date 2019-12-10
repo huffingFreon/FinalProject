@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 namespace FinalProject.Models
 {
     public class SystemSoftware
-    {   
+    {
         public int CSSystemID { get; set; }
-        
+
         public CSSystem CSSystem { get; set; }
 
         public int SoftwareID { get; set; }

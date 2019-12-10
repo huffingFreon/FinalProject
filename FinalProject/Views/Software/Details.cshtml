@@ -85,3 +85,48 @@
 
     </form>
 </div>
+<hr />
+<div>
+    <h4>Systems that use @Model.Software.Name</h4>
+
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Systems[0].CSSystemID)</th>
+                <th>@Html.DisplayNameFor(model => model.Systems[0].Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Systems[0].IPAddress)</th>
+                <th>Primary User Name</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Software.NeededOn)
+            {
+                <tr>
+                    <th>@Html.DisplayFor(modelItem => item.CSSystem.CSSystemID)</th>
+                    <td>@Html.DisplayFor(modelItem => item.CSSystem.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CSSystem.IPAddress)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CSSystem.PrimaryUser.Name)</td>
+                    <td class="text-center"><a href="/Software/Details/@Model.Software.SoftwareID/SystemDelete/@item.CSSystem.CSSystemID"><i class="fas fa-dumpster-fire"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <form class="form-inline" action="/Software/SystemAdd/@Model.Software.SoftwareID" method="post">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label class="p-2"><b>Add System: </b></label>
+            <select class="form-control" name="sId">
+                @foreach (var item in Model.Systems)
+                {
+                    <option value="@item.CSSystemID">@item.Name</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-lg"><i class="fas fa-plus"></i></button>
+
+    </form>
+</div>

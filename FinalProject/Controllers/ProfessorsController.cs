@@ -108,6 +108,7 @@ namespace FinalProject.Controllers
 
             var inventoryItem = _context.InventoryItems.Single(i => i.InventoryItemID == iId);
 
+            //Marks items as checked out when added to a Professor
             inventoryItem.CheckedOut = true;
 
             professor.CheckedOutItems.Add(inventoryItem);
@@ -162,6 +163,7 @@ namespace FinalProject.Controllers
 
                 var inventoryItem = _context.InventoryItems.Single(p => p.InventoryItemID == iId);
 
+                //Unmarks items as checked out when removed from a professor
                 inventoryItem.CheckedOut = false;
 
                 professor.CheckedOutItems.Remove(inventoryItem);
