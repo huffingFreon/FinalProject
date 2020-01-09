@@ -70,6 +70,7 @@ namespace FinalProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Automatically marking item checked out status based on if there was a UserID passed or not
                 if (inventoryItem.UserID != null)
                 {
                     inventoryItem.CheckedOut = true;
@@ -119,6 +120,7 @@ namespace FinalProject.Controllers
             {
                 try
                 {
+                    //Automatically marking item checked out status based on if there was a UserID passed or not
                     if (inventoryItem.UserID != null)
                     {
                         inventoryItem.CheckedOut = true;

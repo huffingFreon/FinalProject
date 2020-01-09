@@ -2,7 +2,7 @@
 ///
 /// Project: Final Project 
 /// File Name: ProfessorSoftwareViewModel.cs
-/// Description: Model for when views require one professor to many software.
+/// Description: Model for when views require one professor to many software, systems, and inventory items.
 /// Course: CSCI 2910-201
 /// Author: Ben Higgins, higginsba@etsu.edu
 /// Created: November 23, 2019

@@ -2,7 +2,7 @@
 ///
 /// Project: Final Project 
 /// File Name: SystemSoftwareViewModel.cs
-/// Description: Model for when one CSSystem has many software
+/// Description: Model for when views require one CSSystem to many software
 /// Course: CSCI 2910-201
 /// Author: Ben Higgins, higginsba@etsu.edu
 /// Created: December 06, 2019
